@@ -1,23 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Loading from './Loading'
+import LoadMore from './LoadMore'
 
-const Menu = ({ foodItems }) => {
+const Menu = ({ menuItems, isLoading }) => {
+  const [maxData, setMaxData] = useState(6)
   return (
     <div className='section-center'>
-      {foodItems.map((food) => {
-        const { id, title, price, img, desc } = food
-        return (
-          <article key={id} className='menu-item'>
-            <img src={img} alt={title} className='photo' />
-            <div className='item-info'>
-              <header>
-                <h4>{title}</h4>
-                <h4 className='price'>${price}</h4>
-              </header>
-              <p className='item-text'>{desc}</p>
-            </div>
-          </article>
-        )
-      })}
+      {isLoading ? (
+        <Loading />
+      ) : (
+        menuItems.slice(0, maxData).map((food) => {
+          const { strMeal, strMealThumb, idMeal, category } = food
+          return (
+            <>
+              <article key={idMeal} className='menu-item'>
+                <img src={strMealThumb} alt={strMeal} className='photo' />
+                <div className='item-info'>
+                  <header>
+                    <h4>{strMeal}</h4>
+                    <h4 className='price'>$0</h4>
+                  </header>
+                  <p className='item-text'>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Tenetur perferendis laboriosam excepturi repellat recusandae
+                    iure itaque!
+                  </p>
+                </div>
+              </article>
+            </>
+          )
+        })
+      )}
+      <LoadMore
+        setMaxData={setMaxData}
+        maxData={maxData}
+        menuItems={menuItems}
+      />
     </div>
   )
 }

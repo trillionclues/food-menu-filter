@@ -1,40 +1,74 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import items from '../src/assets/data'
 import Categories from './Components/Categories'
 import Menu from './Components/Menu'
 // meal data
-import { breakfastMeal, dinnerMeal, lunchMeal } from './assets/fetchMeal'
-
-// create a new array adding a new category type to the menu category data
-const allCategories = ['all', ...new Set(items.map((item) => item.category))]
+import { url } from './assets/fetchMeal'
+import Loading from './Components/Loading'
 
 function App() {
-  const [foodItems, setFoodItems] = useState(items)
-  const [categories, setCategories] = useState(allCategories)
-  const [mealCat, setMealCat] = useState(['Breakfast', 'Lunch', 'Shakes'])
+  const [categories, setCategories] = useState([])
+  const [mealItems, setMealItems] = useState([])
+  const [menuItems, setMenuItems] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  // const [data, setData] = useState([])
+  // console.log(menuItems)
+  // console.log(mealItems.length)
 
-  // const urls = [
-  //   'https://www.themealdb.com/api/json/v1/1/filter.php?c=Chicken',
-  //   'https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood',
-  // ]
+  // fetch meal and concate all
 
-  // const getData = async () => {
-  //   const results = await Promise.all(
-  //     urls.map((url) => fetch(url).then((res) => res.json()))
-  //   ).then((data) => {
-  //     const [result1, result2] = data
-  //     return [...result1.meals, ...result2.meals]
-  //   })
-  //   setData(results)
-  //   console.log(results)
-  // }
+  const getMeal = async (mealType, mealTime) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`${url}${mealType}`)
+      const respData = await response.json()
+      const Meal = respData.meals.map((v) => ({ ...v, category: mealTime }))
+      setIsLoading(false)
+      return Meal
+    } catch (error) {
+      setIsLoading(false)
+    }
+  }
 
-  // useEffect(() => {
-  //   getData()
-  // }, [])
+  const fetchAllMeal = async () => {
+    const chicken = await getMeal('Chicken', 'Breakfast')
+    const seafood = await getMeal('Seafood', 'Lunch')
+    const dessert = await getMeal('Dessert', 'Dinner')
+    const AllMeals = [...chicken, ...seafood, ...dessert]
+    setMenuItems(AllMeals)
+
+    // create a new array adding a new category type to the menu category data
+    const allCategories = [
+      'all',
+      ...new Set(AllMeals.map((item) => item.category)),
+    ]
+    setCategories(allCategories)
+  }
+
+  useEffect(() => {
+    const renderMailList = fetchAllMeal()
+    return () => {
+      renderMailList
+    }
+  }, [])
+
+  // check loading state
+  if (isLoading) {
+    return <Loading />
+  }
+
+  // filter meal category
+  const filterNav = (catItem) => {
+    // console.log(catItem, 'catItem')
+    if (catItem === 'all') {
+      setMenuItems(menuItems)
+      return
+    }
+    // set items to respective original categories
+    const newItems = menuItems.filter((meal) => meal.category === catItem)
+    console.log(newItems)
+    return setMenuItems(newItems)
+  }
 
   return (
     <main>
@@ -43,8 +77,8 @@ function App() {
           <h2>Food Menu</h2>
           <div className='underline'></div>
         </div>
-        <Categories categories={categories} setFoodItems={setFoodItems} />
-        <Menu foodItems={foodItems} />
+        <Categories categories={categories} filterNav={filterNav} />
+        <Menu isLoading={isLoading} menuItems={menuItems} />
       </div>
     </main>
   )

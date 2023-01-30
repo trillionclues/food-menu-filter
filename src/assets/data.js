@@ -7,6 +7,7 @@ const menu = [
     img: './images/item-1.jpeg',
     desc: `I'm baby woke mlkshk wolf bitters live-edge blue bottle, hammock freegan copper mug whatever cold-pressed `,
   },
+
   {
     id: 2,
     title: 'diner double',
@@ -71,5 +72,5 @@ const menu = [
     img: './images/item-9.jpeg',
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
-];
-export default menu;
+]
+export default menu

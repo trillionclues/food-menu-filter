@@ -11,6 +11,7 @@ function App() {
   const [mealItems, setMealItems] = useState([])
   const [menuItems, setMenuItems] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [searchMenu, setSearchMenu] = useState('')
 
   // console.log(menuItems)
   // console.log(mealItems.length)
@@ -77,8 +78,17 @@ function App() {
           <h2>Food Menu</h2>
           <div className='underline'></div>
         </div>
-        <Categories categories={categories} filterNav={filterNav} />
-        <Menu isLoading={isLoading} menuItems={menuItems} />
+        <Categories
+          categories={categories}
+          filterNav={filterNav}
+          setSearchMenu={setSearchMenu}
+        />
+        <Menu
+          isLoading={isLoading}
+          menuItems={menuItems?.filter((foodMenu) =>
+            foodMenu.strMeal.toLowerCase().includes(searchMenu.toLowerCase())
+          )}
+        />
       </div>
     </main>
   )

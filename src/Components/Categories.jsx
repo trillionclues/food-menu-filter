@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import foodItems from '../assets/data'
 import Search from './Search'
 
-const Categories = ({ categories, filterNav }) => {
-  const [search, setSearchText] = useState('')
+const Categories = ({ categories, filterNav, setSearchMenu }) => {
   // const [mealData, setMealData] = useState([])
   // // fetch meal and concate all
   // const getData = async () => {
@@ -34,7 +33,7 @@ const Categories = ({ categories, filterNav }) => {
             )
           })}
         </div>
-        <Search handleSearch={setSearchText} />
+        <Search handleSearch={setSearchMenu} />
       </div>
     </div>
   )

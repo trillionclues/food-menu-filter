@@ -22,7 +22,7 @@ Some of the major technologies used include:
 
 ## Preview
 
-Click to view a live page of the Food Menu App
+Click to view a live page of the [Food Menu App](https://food-menu-filter.netlify.app/)
 
 ## Got a suggestion/feedback?
 

@@ -13,6 +13,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchMenu, setSearchMenu] = useState('')
 
+  console.log(menuItems)
   // console.log(menuItems)
   // console.log(mealItems.length)
 
@@ -37,6 +38,7 @@ function App() {
     const dessert = await getMeal('Dessert', 'Dinner')
     const AllMeals = [...chicken, ...seafood, ...dessert]
     setMenuItems(AllMeals)
+    setMealItems(AllMeals)
 
     // create a new array adding a new category type to the menu category data
     const allCategories = [
@@ -61,14 +63,17 @@ function App() {
   // filter meal category
   const filterNav = (catItem) => {
     // console.log(catItem, 'catItem')
-    if (catItem === 'all') {
-      setMenuItems(menuItems)
-      return
-    }
     // set items to respective original categories
-    const newItems = menuItems.filter((meal) => meal.category === catItem)
-    console.log(newItems)
-    return setMenuItems(newItems)
+    const newItems = mealItems.filter((meal) => meal.category === catItem)
+
+    if (catItem === 'all') {
+      setMenuItems(mealItems)
+      return
+    } else {
+      setMenuItems(newItems)
+    }
+
+    // console.log(newItems)
   }
 
   return (
@@ -85,9 +90,15 @@ function App() {
         />
         <Menu
           isLoading={isLoading}
-          menuItems={menuItems?.filter((foodMenu) =>
-            foodMenu.strMeal.toLowerCase().includes(searchMenu.toLowerCase())
-          )}
+          menuItems={menuItems?.filter((foodMenu) => {
+            if (searchMenu === '') {
+              return foodMenu
+            } else {
+              return foodMenu.strMeal
+                .toLowerCase()
+                .includes(searchMenu.toLowerCase())
+            }
+          })}
         />
       </div>
     </main>
